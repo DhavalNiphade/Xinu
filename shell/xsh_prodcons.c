@@ -13,8 +13,13 @@
 
 int n=0;	/* Define global variable */
 
+sid32 produced, consumed;
+
 shellcmd xsh_prodcons(int nargs, char *args[])
  {
+
+produced=semcreate(0);
+consumed=semcreate(0);
 
 int count=2000;								/* Initialize count */
 		

@@ -6,4 +6,4 @@ extern int n;
 void produce (int count);
 void consume (int count);
 
-
+extern sid32 produced, consumed;
