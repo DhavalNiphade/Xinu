@@ -2,10 +2,12 @@
 #include <prodcons.h>
 #include <stdio.h>
 
-void consume(int count)
-{
 	sid32 produced;
 	sid32 consumed;
+
+
+void consume(int count)
+{
 
 	int32 j=0;
 	for(j=0;j<=count;j++)
