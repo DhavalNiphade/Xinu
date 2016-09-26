@@ -11,7 +11,7 @@
 
 /* Declared variables and prototypes from the include function */
 
-int n=0;	/* Define global variable */
+int n;	/* Define global variable */
 
 sid32 produced, consumed;
 
@@ -19,7 +19,7 @@ shellcmd xsh_prodcons(int nargs, char *args[])
  {
 
 produced=semcreate(0);
-consumed=semcreate(0);
+consumed=semcreate(1);
 
 int count=2000;								/* Initialize count */
 		
@@ -52,7 +52,7 @@ int count=2000;								/* Initialize count */
 		}
 	}
 	
-	resume( create(produce,1024,20,"produce",1,count));
+	resume( create(produce,1024,20,"produce",1,count ));
 	resume( create(consume,1024,20,"consume",1,count));
 
 return 0;
