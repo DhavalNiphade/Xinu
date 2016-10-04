@@ -1,4 +1,4 @@
-	/* xsh_hello.c - xsh_hello */
+		/* xsh_hello.c - xsh_hello */
 	
 	#include <xinu.h>
 	#include <string.h>
@@ -16,7 +16,7 @@
 		
 		printf ("Hello ");
 
-		if(nargs>1)
+		if(nargs==2)
 		{
 			printf("%s", args[1]);
 		}
@@ -40,6 +40,17 @@
 
 		printf (", Welcome to the world of Xinu !!");
 		printf ("\n");
+
+		if(nargs>2)
+		{
+			printf("\nToo many inputs");
+			printf("\nTry hello --help for more information");
+		}
+		
+		if(nargs<=1)
+		{
+			printf("Too few arguments");
+		}
 
 	return 0;
 }
