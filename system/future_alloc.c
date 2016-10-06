@@ -5,15 +5,15 @@
 
 typedef struct futent future;
 
- future* future_alloc(int future_flag)
+future* future_alloc(int future_flag)
  {
 
 intmask mask;
 mask=disable(); //Disable the interrupt mask
 
-future *fut=getmem(sizeof(future));
-printf("\nAddress of fut : %s",*fut);
-printf("\n %d",sizeof(future));
+future *f=getmem(sizeof(future));
+//printf("\nAddress of fut : %s",*fut);
+//printf("\n %d",sizeof(future));
 
 /*if(fut.future_flag!=FUTURE_EXCLUSIVE||fut.future_state==FUTURE_WAITING)	
 	{
@@ -23,13 +23,13 @@ printf("\n %d",sizeof(future));
 */
 
 
-		//fut->*value=; 							Initialize value to entered input
-		fut->flag=FUTURE_EXCLUSIVE; 			//Initialize in state where there is a one to one relationship between threads calling get & set 
-		fut->state=FUTURE_EMPTY;				//Initiliaze to Empty state
-		printf("\nFuture generated : %d", fut->state);			
+		//fut->*value=; 					Initialize value to entered input
+		f->flag=FUTURE_EXCLUSIVE; 			//Initialize in state where there is a one to one relationship between threads calling get & set 
+		f->state=FUTURE_EMPTY;				//Initiliaze to Empty state
+		//printf("\nFuture generated : %d", f->state);			
 										
 
 restore(mask); 					//Enable the interrupt mask
-return(fut); 						//Return the future
+return(f); 						//Return the future	
 
 }
