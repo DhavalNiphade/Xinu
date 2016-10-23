@@ -4,10 +4,12 @@
 /* define states */
 #define FUTURE_EMPTY	  0
 #define FUTURE_WAITING 	  1         
-#define FUTURE_VALID 	  2         
+#define FUTURE_VALID 	  2
 
 /* modes of operation for future*/
-#define FUTURE_EXCLUSIVE  1	
+#define FUTURE_EXCLUSIVE  1
+#define FUTURE_SHARED     2	    
+#define FUTURE_QUEUE      3 
 
 typedef struct futent
 {
@@ -15,6 +17,8 @@ typedef struct futent
    int flag;	//Defines mode of operation for the future	
    int state;  //Defines which state the future is in
    pid32 pid; //Process ID for the concerned process waiting on the future
+   queue set_queue;	
+   queue get_queue;
 } future;
 
 /* Interface for system call */
@@ -24,3 +28,5 @@ syscall future_get(future*, int*);
 syscall future_set(future*, int*);
  
 #endif /* _FUTURE_H_ */
+
+
