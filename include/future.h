@@ -1,5 +1,7 @@
 #ifndef _FUTURE_H_
 #define _FUTURE_H_
+
+#include <f_queue.h>
  
 /* define states */
 #define FUTURE_EMPTY	  0
@@ -28,5 +30,3 @@ syscall future_get(future*, int*);
 syscall future_set(future*, int*);
  
 #endif /* _FUTURE_H_ */
-
-

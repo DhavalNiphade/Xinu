@@ -79,5 +79,3 @@ int front(queue *q)
 	}
 
 	return q->elements[q->front];	
-
-

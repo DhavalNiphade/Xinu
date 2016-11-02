@@ -20,4 +20,3 @@ uint future_cons(future *fut) {
   return OK;
  
 }
-

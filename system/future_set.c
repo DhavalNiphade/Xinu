@@ -2,7 +2,7 @@
 
 #include<xinu.h>
 #include<future.h>
-#inlcude<future_queue.h>
+#include<future_queue.h>
 
 typedef struct futent future;
 
