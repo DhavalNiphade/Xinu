@@ -27,6 +27,17 @@ const	struct	cmdent	cmdtab[] = {
 	{"hello", FALSE, xsh_hello},
 	{"prodcons",FALSE,xsh_prodcons}
 
+#ifdef ARM_BBB
+  {"arp",		FALSE,	xsh_arp},
+  {"ipaddr",	FALSE,	xsh_ipaddr},
+	{"ping",	FALSE,	xsh_ping},
+	{"udp",		FALSE,	xsh_udpdump},
+	{"udpecho",	FALSE,	xsh_udpecho},
+	{"udpeserver",	FALSE,	xsh_udpeserver},
+#endif
+	{"test_mmu", 	FALSE, 	xsh_mmu},
+  {"?",		FALSE,	xsh_help}
+>>>>>>> upstream/master
 };
 
 uint32	ncmd = sizeof(cmdtab) / sizeof(struct cmdent);
