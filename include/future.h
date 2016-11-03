@@ -17,8 +17,8 @@ typedef struct futent
    int flag;	//Defines mode of operation for the future	
    int state;  //Defines which state the future is in
    pid32 pid; //Process ID for the concerned process waiting on the future
-   //queue set_queue;	
-   //queue get_queue;
+   queue set_queue;	
+   queue get_queue;
 } future;
 
 /* Interface for system call */
