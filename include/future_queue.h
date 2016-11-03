@@ -1,100 +1,40 @@
-/* QUEUE DATA STRUCTURE */
+#include <xinu.h>
+#include <future.h>
 
-typedef struct queue
-{
-	int capacity;
-	int size;
-	int front;
-	int rear;
-	pid32 *process;
-
-}queue;
-
-/* CREATE A QUEUE WITH ITS MAX SIZE AS AN ARGUMENT */
-
-queue * createqueue	(int maxElements)
-{
-	queue *q;
-	q = (queue*)malloc(sizeof(queue);
-	q->process=(int *)malloc(sizeof(int)*maxElements);
-	q->size = 0;
-        q->capacity = maxElements;
-        q->front = 0;
-        q->rear = -1;
-	return q;
+proc_queue* init_proc_queue(){
+  proc_queue* head=getmem(sizeof(proc_queue));
+  head->next=0;
+  head->pid=-1;
+  return head;
+  //queue will always have a dummy inital node "head" once it as been initialized. We dont store the actual process on head
+  //if we store the process at head, and when it will be dequeued , we will loose the queue.
+  //any process who want to join the queue after that will not be successful and cause unwanted behavior.
 }
 
-/* REMOVE ELEMENT FROM THE FRONT */
-
-pid32 dequeue (queue *q)
-{
-	if(q->size==0)
-		{
-			printf("\nQueue is empty\n");
-			return 0;
-		}
-
-	else
-		{
-			queue *q_temp = q->front;
-			pid32 p = temp->pid
-			q->size--;
-			q->front++;
-			if(q->front==q->capacity)
-				q->front=0;
-		}
-	return p ;
+int f_isempty(proc_queue *head){
+  return (!(head->next));
 }
 
 
-/* ADD A NEW ELEMENT AT THE REAR */
-
-void enqueue (queue *q , pid32 p)
-{
-	if(q->size==q->capacity)
-	{
-		printf("\nQueue is full\n");
-		exit(0);
-	}
-
-	else
-	{
-		q->size++;
-		q->rear=q->rear+1;
-		if(q->rear==q->capacity)
-			q->rear=0;
-		q->process[q->rear]=p;
-	}
-	return;
+fenqueue (proc_queue *head, pid32 pid){
+  proc_queue *tempProc=getmem(sizeof(proc_queue));
+  tempProc->pid=pid;
+  tempProc->next=0;
+  proc_queue *cur;
+  cur=head;
+  while(cur->next!=0){
+    cur=cur->next;
+  }
+  cur->next=tempProc; 
 }
 
-
-
-/* OBTAIN FOREMOST ELEMENT */
-
-
-int front(queue *q)
-{
-	if(q->size=0)
-	{
-		printf("\nQueue is empty\n");
-		exit(0);
-	}
-
-	return q->elements[q->front];	
+pid32 fdequeue(proc_queue *head){
+  if(head->next){
+	proc_queue *temp=head->next;
+	pid32 p=temp->pid;
+	head->next=temp->next;
+	freemem(temp,sizeof(proc_queue));
+	return p;
+  }
+  return 0;
 }
-
-/* CHECK WHETHER QUEUE IS EMPTY */
-
-int empty (queue *q)
-{
-	if(front>rear) {
-		printf("Queue is empty");
-		return 1;
-	}
-	
-	printf("Queue has : %d processes" , queue->size);
-}
-	 
-
-

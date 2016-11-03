@@ -18,7 +18,7 @@ syscall future_get(future *f, int *value)
 if(f->flag==FUTURE_EXCLUSIVE) {
 		
 	if(f->state==FUTURE_EMPTY){
-		f->pid=pid;			
+		f->pid=p;			
 		f->state=FUTURE_WAITING;
 		suspend(f->pid);
 	}
@@ -27,7 +27,7 @@ if(f->flag==FUTURE_EXCLUSIVE) {
 		*value=f->value;
 		f->state=FUTURE_EMPTY;
 		restore(mask);
-		return OK;
+		return future_free(f);
 	}
 
 	if(f->state==FUTURE_WAITING){
@@ -42,7 +42,7 @@ if(f->flag==FUTURE_SHARED) {
 
 	if(f->state==FUTURE_EMPTY) {
 
-		enqueue(f->get_queue, p);
+		fenqueue(f->get_queue, p);
 		f->state=FUTURE_WAITING;
 		suspend(p);
 	}
@@ -62,9 +62,9 @@ if(f->flag==FUTURE_SHARED) {
 	
 	if(f->state==FUTURE_WAITING) {
 	
-	enqueue(f->get_queue, p);
+	fenqueue(f->get_queue, p);
 	restore(mask);
-	return OK;
+	suspend(p);
 	
 	}
 		
@@ -75,10 +75,10 @@ if(f->flag==FUTURE_SHARED) {
 if(f->flag==FUTURE_QUEUE) {
 
 	if(f->state==FUTURE_EMPTY) {
+		fenqueue(f->get_queue, p);
 		f->state=FUTURE_WAITING;
-		enqueue(f->get_queue, p);
 		restore(mask);
-		return OK;
+		suspend(p);
 	}
 
 	if(f->state==FUTURE_VALID) {
@@ -90,11 +90,21 @@ if(f->flag==FUTURE_QUEUE) {
 			f->state=FUTURE_EMPTY;
 
 		if(!empty(f->set_queue))
-			resume(dequeue(f->set_queue));
+			resume(fdequeue(f->set_queue));
 
 	restore(mask);
 	return OK;
+	}
+
+	if(f->state==FUTURE_WAITING) {
+		fenqueue(f->get_queue, p);
+		if(!empty(f->set_queue))
+			resume(fdequeue(f->set_queue))
+		restore(mask);
+		suspend(p);
+	}
 }
+			
 	
 
 restore(mask);

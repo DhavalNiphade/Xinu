@@ -36,7 +36,7 @@ if(f->flag==FUTURE_SHARED) {
 	f->state=FUTURE_VALID;
 
 	while (!(empty(f->get_queue))) 
-		resume(dequeue(f->get_queue));
+		resume(fdequeue(f->get_queue));
 
 	}
 
@@ -91,17 +91,17 @@ else if (f->flag==FUTURE_QUEUE) {
 		f->state=FUTURE_VALID;
 
 		if (!(empty(f->get_queue))) 
-			resume(dequeue(f->get_queue));
+			resume(fdequeue(f->get_queue));
 
 	}
 
 	if(f->state==FUTURE_VALID) {
 
 	pid32 p = getpid();
-	enqueue(f->set_queue, p);
+	fenqueue(f->set_queue, p);
 	if(!empty(f->get_queue)) {
 
-		resume(dequeue(f->get_queue));
+		resume(fdequeue(f->get_queue));
 		suspend(p);
 		restore(mask);
 

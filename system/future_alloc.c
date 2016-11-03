@@ -2,6 +2,7 @@
 
 #include<xinu.h>
 #include<future.h>
+#include<future_queue.h>
 
 typedef struct futent future;
 
@@ -11,25 +12,28 @@ future* future_alloc(int future_flag)
 intmask mask;
 mask=disable(); //Disable the interrupt mask
 
-future *f=getmem(sizeof(future));
-//printf("\nAddress of fut : %s",*fut);
-//printf("\n %d",sizeof(future));
+future *fu=getmem(sizeof(future));
 
-/*if(fut.future_flag!=FUTURE_EXCLUSIVE||fut.future_state==FUTURE_WAITING)	
-	{
-		restore(mask);
-		return SYSERR;
+if (fu!=SYSERR) {
+
+	fu->value=0;
+	fu->flag=future_flag;
+	fu->state=FUTURE_EMPTY;
+	fu->pid=0;
+	fu->get_queue=0;
+	fu->set_queue=0;
+	
+	if(fu->flag==FUTURE_SHARED)
+		fu->get_queue=init_proc_queue();
+	
+	if(fu->flag==FUTURE_QUEUE) {
+		fu->get_queue=init_proc_queue();
+		fu->set_queue=init_proc_queue();
 	}
-*/
 
-
-		//fut->*value=; 					Initialize value to entered input
-		f->flag=FUTURE_EXCLUSIVE; 			//Initialize in state where there is a one to one relationship between threads calling get & set 
-		f->state=FUTURE_EMPTY;				//Initiliaze to Empty state
-		//printf("\nFuture generated : %d", f->state);			
-										
+}
 
 restore(mask); 					//Enable the interrupt mask
-return(f); 						//Return the future	
+return fu ; 						//Return the future	
 
 }

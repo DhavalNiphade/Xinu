@@ -16,10 +16,8 @@ if(f->flag!=FUTURE_EXCLUSIVE||f->state==FUTURE_WAITING)
 		restore(mask);
 		return SYSERR;
 	}
-restore(mask);
-return freemem(&f, sizeof(f));
-	
- 					//Enable the interrupt mask
-//return(fut); 						//Return the future
 
+restore(mask);
+return freemem(f, sizeof(f));
+	
 }
