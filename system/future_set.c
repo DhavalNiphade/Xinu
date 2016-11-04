@@ -11,6 +11,9 @@ syscall future_set(future *f, int *value) {
 intmask mask;
 mask=disable(); //Disable the interrupt mask
 
+
+/* For SHARED Mode */
+
 if(f->flag==FUTURE_SHARED) {
 
 	if(f->state==FUTURE_EMPTY) {
@@ -45,6 +48,8 @@ if(f->flag==FUTURE_SHARED) {
 
 }
 
+/* For EXCLUSIVE Mode */
+
 else if(f->flag==FUTURE_EXCLUSIVE) {
 
 	if(f->state==FUTURE_EMPTY){
@@ -73,6 +78,8 @@ else if(f->flag==FUTURE_EXCLUSIVE) {
 		}
 
 }
+
+/* For QUEUE Mode */
 
 else if (f->flag==FUTURE_QUEUE) {
 

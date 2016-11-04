@@ -1,8 +1,6 @@
 #ifndef _FUTURE_H_
 #define _FUTURE_H_
 
-#include<future_queue.h>
-
 /* define states */
 #define FUTURE_EMPTY	  0
 #define FUTURE_WAITING 	  1         
