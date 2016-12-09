@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h> 
+
+#define BUFFER_LEN 1024
+
+int main(int argc, char *argv[])
+{
+    //declaration
+    int clientSocket, portNum, nBytes;
+    struct sockaddr_in serverAddress;
+    struct hostent *server;
+    char buffer[BUFFER_LEN];
+	
+	//checking for correct input
+    if (argc < 3) {
+       printf("\nUsage %s <ip address> <port number>", argv[0]);
+       exit(0);
+    }
+    //collect arguments
+    portNum = atoi(argv[2]);
+    server = gethostbyname(argv[1]);
+    //opening socket
+    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (clientSocket < 0){
+		printf("\n Error in opening socket\n");
+		exit(0);
+	}       
+    
+    if (server == NULL) {
+        printf("\nError in discovering host\n");
+        exit(0);
+    }
+    
+    bzero((char *) &serverAddress, sizeof(serverAddress));
+    serverAddress.sin_family = AF_INET;
+    bcopy((char *)server->h_addr_list[0], (char *)&serverAddress.sin_addr.s_addr,server->h_length);
+    serverAddress.sin_port = htons(portNum);
+    
+    if (connect(clientSocket,(struct sockaddr *) &serverAddress,sizeof(serverAddress)) < 0){
+		printf("\nError in connecting ! Exiting\n");
+		exit(0);
+	} 
+    //can be put this part in loop    
+	while(1){
+		printf("\nYour Message: ");
+		bzero(buffer,BUFFER_LEN);
+		fgets(buffer,BUFFER_LEN-1,stdin);
+		nBytes = write(clientSocket,buffer,strlen(buffer));
+		if (nBytes < 0){
+			printf("\nError in writing");
+		}
+			 
+		bzero(buffer,256);
+		nBytes = read(clientSocket,buffer,BUFFER_LEN-1);
+		
+		if (nBytes < 0){
+			printf("\nError in reading from socket");
+		}        
+		printf("\nServer Reply: %s",buffer);
+	}
+    //loop 
+    close(clientSocket);  
+    return 0;
+}
